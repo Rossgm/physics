@@ -11,7 +11,9 @@ public class Gui {
 		glp = GLProfile.getDefault();
 		caps = new GLCapabilities(glp);
 		canvas = new GLCanvas(caps);
-        canvas.addGLEventListener(new Canvas());
+		Canvas c = new Canvas();
+        canvas.addGLEventListener(c);
+        canvas.addMouseListener(c);
 	}
 	
 	public GLCanvas getCanvas(){
