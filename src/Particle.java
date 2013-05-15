@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class Particle {
@@ -8,16 +9,19 @@ public class Particle {
 	private double y;	
 	private double vx;
 	private double vy;
-	private double radius = 5.0;
+	private double radius = 1.0;
 	private double mass = 1.0;
 	public static double stepSize = 0.05;
 	public Color color = new Color(1, 1, 0);
+	ArrayList<Force> forces = new ArrayList<Force>();
+	Force gravity;
 
 	public Particle(double xInit, double yInit){
 		setX(xInit);
 		setY(yInit);
 		vx = Math.random()*2;
 		vy = Math.random()*2;
+		init();
 	}
 	
 	public Particle(double xInit, double yInit, double vxInit, double vyInit){
@@ -25,8 +29,14 @@ public class Particle {
 		y = yInit;
 		vx = vxInit;
 		vy = vyInit;
+		init();
 	}
-
+	
+	private void init(){
+		gravity = new Force(10*mass, 1.5*Math.PI);
+		forces.add(gravity);
+	}
+	
 	/**
 	 * @return the x
 	 */
@@ -122,17 +132,17 @@ public class Particle {
 	
 	// checks if the particle is outside the window, and handles bouncy collisions
 	private void checkBoundries(){
-		if(x >= 500){
+		if(x >= Gui.WIDTH){
 			vx *= -0.8;
-			x = 500;
+			x = Gui.WIDTH;
 		}
 		if(x <= 0){
 			vx *= -0.8;
 			x = 0;
 		}
-		if(y >= 500){
+		if(y >= Gui.HEIGHT){
 			vy *= -0.5;
-			y = 500;
+			y = Gui.HEIGHT;
 		}
 		if(y <= 0){
 			vy *= -0.5;
@@ -162,29 +172,29 @@ public class Particle {
 		a2.translate();
 		b2.translate();
 		
-		double x1 = a2.getX();
-		double y1 = a2.getY();
-		double vx1 = a2.getVX();
-		double vy1 = a2.getVY();
-		double r1 = a2.getRadius();
-		double x2 = b2.getX();
-		double y2 = b2.getY();
-		double vx2 = b2.getVX();
-		double vy2 = b2.getVY();
-		double r2 = b2.getRadius();
-
-		double dx = x2-x1;
-		double dy = y2-y1;
-		double s1 = Math.sqrt(vx1*vx1+vy1*vy1); //initial speed of particle 1
-		double s2 = Math.sqrt(vx2*vx2+vy2*vy2); //initial speed of particle 2
-		double theta1 = Math.atan2(vy1, vx1); //initial direction of particle 1
-		double theta2 = Math.atan2(vy2, vx2); //initial direction of particle 2
 
 		/*System.out.printf("s1:%f theta1:%f\n", s1, theta1);
 		System.out.printf("s2:%f theta2:%f\n\n", s2, theta2);*/
 		
 		//check if the particles are intersecting
-		if( Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(r1+r2, 2) ){
+		if( Math.pow(b2.getX()-a2.getX(), 2) + Math.pow(b2.getY()-a2.getY(), 2) <= Math.pow(a2.getRadius()+b2.getRadius(), 2) ){
+
+			double x1 = a2.getX();
+			double y1 = a2.getY();
+			double x2 = b2.getX();
+			double y2 = b2.getY();
+			double dx = x2-x1;
+			double dy = y2-y1;
+			double vx1 = a2.getVX();
+			double vy1 = a2.getVY();
+			double vx2 = b2.getVX();
+			double vy2 = b2.getVY();
+
+			double s1 = Math.sqrt(vx1*vx1+vy1*vy1); //initial speed of particle 1
+			double s2 = Math.sqrt(vx2*vx2+vy2*vy2); //initial speed of particle 2
+			double theta1 = Math.atan2(vy1, vx1); //initial direction of particle 1
+			double theta2 = Math.atan2(vy2, vx2); //initial direction of particle 2
+			
 			//System.out.println("Colide " + Math.atan2(dy, dx));
 			double theta3 = Math.acos(dx/(Math.sqrt(dy*dy+dx*dx))); //the angle of the line of collision
 			double vt1 = s1*Math.cos(theta1-theta3); //particle a's velocity tangent to the line of collision (conserved)
@@ -199,8 +209,8 @@ public class Particle {
 		    b.setVX(Math.cos(theta3)*vt2t+Math.cos(theta3+Math.PI/2)*vp2);
 		    b.setVY(Math.sin(theta3)*vt2t+Math.sin(theta3+Math.PI/2)*vp2);
 		    
-		    a.color = Color.CYAN;
-		    b.color = Color.ORANGE;
+		    //a.color = Color.CYAN;
+		    //b.color = Color.ORANGE;
 		    /*
 			System.out.printf("dx:%f dy:%f dr:%f\n", dx, dy, 1.0);
 			System.out.printf("x:%f y:%f vx:%f vy:%f\n", x1, y1, vx1, vy1);

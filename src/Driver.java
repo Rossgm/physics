@@ -12,7 +12,7 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("DOOT DOOT");
-		frame.setSize(500, 500);
+		frame.setSize(100, 100);
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

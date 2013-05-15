@@ -5,7 +5,8 @@ public class Gui {
 	private GLProfile glp;
 	private GLCapabilities caps;
 	private GLCanvas canvas;
-	//public static final int 
+	public static final int WIDTH = 100;
+	public static final int HEIGHT = 100;
 	
 	public void initialize(){
 		glp = GLProfile.getDefault();

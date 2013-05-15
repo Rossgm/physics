@@ -20,8 +20,8 @@ public class Canvas implements GLEventListener, MouseListener{
 	}
 	
 	public void update(){
-		if(time%240 == 0 && particles.size() < 50)
-			particles.add(new Particle(Math.random()*500, Math.random()*500));
+		if(time%240 == 0 && particles.size() < 800)
+			particles.add(new Particle(Math.random()*Gui.WIDTH, Math.random()*Gui.HEIGHT));
 			
 		time++;
 		for(Particle p: particles)
@@ -49,7 +49,7 @@ public class Canvas implements GLEventListener, MouseListener{
 	    gl.glColor3f(1, 1, 1);
 		for(Particle p: particles){
 		    gl.glColor3f(p.color.getRed(), p.color.getGreen(), p.color.getBlue());
-			gl.glVertex2d(-1.0+2.0*(p.getX()/500.0), -1.0+2.0*(p.getY()/500.0));
+			gl.glVertex2d(-1.0+2.0*(p.getX()/Gui.WIDTH), -1.0+2.0*(p.getY()/Gui.HEIGHT));
 		}
 		gl.glEnd();
 	}
@@ -61,10 +61,10 @@ public class Canvas implements GLEventListener, MouseListener{
 	public void init(GLAutoDrawable draw) {
 		particles = new ArrayList<Particle>();
 		//particles.add(new Particle(Math.random()*500, Math.random()*500));
-		Particle p = new Particle(100, 100);
+		Particle p = new Particle(20, 20);
 		p.setVelocity(-1, 1*Math.PI);
 		particles.add(p);
-		Particle p2 = new Particle(400, 400);
+		Particle p2 = new Particle(80, 80);
 		p2.setVelocity(-1, 0.5*Math.PI);
 		p2.color = new Color(1, 0, 1);
 		particles.add(p2);
